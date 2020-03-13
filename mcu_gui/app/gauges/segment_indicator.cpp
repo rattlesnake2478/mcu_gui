@@ -1,0 +1,90 @@
+#include "segment_indicator.h"
+
+using namespace McuGui;
+
+constexpr std::array<SegmentIndicator::SegmentMap, 10> SegmentIndicator::VAL_TO_SEGMENTS;
+
+void
+SegmentIndicator::paint(AbstractPainter& painter) const {
+    uint8_t value = value_ > 9 ? 9 : value_;
+    auto origin = painter.getLocalOrigin();
+    for(const auto& segment: VAL_TO_SEGMENTS[value]) {
+        if ( segment >= SegmentType::A && segment <= SegmentType::G) {
+            painter.setLocalOrigin(origin); // restore gauge origin
+            drawSegment(painter, segment);
+        }
+    }
+}
+
+void
+SegmentIndicator::drawSegment(AbstractPainter& painter, SegmentType segment) const {
+    Position segment_pos;
+    const DigitSegment *segment_ptr;
+    const auto dim = DigitSegment::getSize(size_);
+    const CoordType gap = dim.w / 2 - 2;
+
+    switch (segment) {
+    case A:
+        segment_ptr = &horiz_;
+        segment_pos = {
+            (CoordType)(-dim.h/2 - dim.w/2 - gap),
+            (CoordType)(-dim.w/2 - gap * 4 - dim.h * 2)
+        };
+    break;
+    case B:
+        segment_ptr = &vert_;
+        segment_pos = {(CoordType)(-dim.w/2), (CoordType)(-dim.w/2 - gap * 3 - dim.h - dim.h/2)};
+
+    break;
+    case C:
+        segment_ptr = &vert_;
+        segment_pos = {(CoordType)(-dim.w/2), (CoordType)(-dim.w/2 - gap - dim.h/2)};
+    break;
+    case D:
+        segment_ptr = &horiz_;
+        segment_pos = {(CoordType)(-dim.h/2 - dim.w/2 - gap), (CoordType)(-dim.w/2)};
+    break;
+    case E:
+        segment_ptr = &vert_;
+        segment_pos = {(CoordType)(-dim.w/2 - gap*2 - dim.h), (CoordType)(-dim.w/2 - gap - dim.h/2)};
+    break;
+    case F:
+        segment_ptr = &vert_;
+        segment_pos = {(CoordType)(-dim.w/2 - gap*2 - dim.h), (CoordType)(-dim.w/2 - gap * 3 - dim.h - dim.h/2)};
+    break;
+    case G:
+        segment_ptr = &horiz_;
+        segment_pos = {
+            (CoordType)(-dim.h/2 - dim.w/2 - gap),
+            (CoordType)(-dim.w/2 - gap*2  - dim.h)
+        };
+    break;
+    }
+    painter.setLocalOrigin(painter.getLocalOrigin() + segment_pos);
+    segment_ptr->paint(painter);
+}
+
+void
+MultiSegmentIndicator::paint(AbstractPainter& painter) const {
+    auto origin = painter.getLocalOrigin();
+    uint16_t next_value = std::abs(value_);
+    uint8_t offset_pos = 0;
+    const auto segment_dim = DigitSegment::getSize(size_);
+    CoordType offset = segment_dim.w * 3 + segment_dim.h;
+    uint8_t segment_value;
+    do {
+        segment_value = next_value % 10;
+        next_value = next_value / 10;
+        indicator_.setValue(segment_value);
+        painter.setLocalOrigin(origin - Position{(CoordType)(offset * offset_pos), 0});
+        indicator_.paint(painter);
+        ++offset_pos;
+    } while (next_value);
+    if (value_ < 0) {
+        CoordType dash_x_offset = segment_value == 1 ? offset * offset_pos - segment_dim.w * 2 : offset * offset_pos + segment_dim.w;
+        painter.setLocalOrigin(origin - Position{dash_x_offset, (CoordType)(segment_dim.h + segment_dim.w)});
+        dash_.paint(painter);
+    }
+}
+
+
