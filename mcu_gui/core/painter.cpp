@@ -7,7 +7,7 @@
 using namespace McuGui;
 
 void
-AbstractPainter::drawPoint(Point point) {
+AbstractPainter::draw(Point point) {
     Position pos = point.pos() + origin_;
     if (pos.x >= 0 && pos.x < area_.w &&
         pos.y >= 0 && pos.y < area_.h) {
@@ -16,8 +16,23 @@ AbstractPainter::drawPoint(Point point) {
 }
 
 void
-GeometricPainter::
-drawLine(Line line) {
+AbstractPainter::draw(const Mask& mask) {
+    uint8_t shift = 0;
+    uint8_t chunk = 0;
+    for (uint16_t i = 0; i < mask.width; ++i)
+        for (uint16_t j = 0; j < mask.height; ++j) {
+            if((1 << (31 - shift)) & mask.data[chunk]) draw(Point(j, i));
+            ++shift;
+            if (shift >= 32) {
+                shift = 0;
+                ++chunk;
+            }
+            if (chunk >- mask.data.size()) return;
+        }
+}
+
+void
+GeometricPainter::draw(Line line) {
     bool steep = false;
     if (std::abs(line.start.x-line.end.x) < std::abs(line.start.y-line.end.y)) {
         std::swap(line.start.x, line.start.y);
@@ -35,9 +50,9 @@ drawLine(Line line) {
     CoordType y = line.start.y;
     for (CoordType x = line.start.x; x <= line.end.x; x++) {
         if (steep) {
-            drawPoint({y, x});
+            draw(Point(y, x));
         } else {
-            drawPoint({x, y});
+            draw(Point(x, y));
         }
         error2 += derror2;
 
@@ -49,8 +64,7 @@ drawLine(Line line) {
 }
 
 void
-GeometricPainter::
-drawTriangle(Triangle triangle) {
+GeometricPainter::draw(Triangle triangle) {
     auto v1 = triangle.p1.pos();
     auto v2 = triangle.p2.pos();
     auto v3 = triangle.p3.pos();
@@ -73,17 +87,16 @@ drawTriangle(Triangle triangle) {
             Point p;
             p.x = j;
             p.y = v1.y+i;
-            drawPoint(p);
+            draw(p);
         }
     }
 }
 
 void
-GeometricPainter::
-drawRectangle(Rectangle rectangle) {
+GeometricPainter::draw(Rectangle rectangle) {
     for (CoordType y = rectangle.top_left.y; y <= rectangle.bottom_right.y; ++y) {
         for(CoordType x = rectangle.top_left.x; x <= rectangle.bottom_right.x; ++x) {
-            drawPoint({x, y});
+            draw(Point(x, y));
         }
     }
 }

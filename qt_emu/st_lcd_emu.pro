@@ -2,7 +2,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-CONFIG += c++14
+CONFIG += c++17
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -17,7 +17,10 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     ../mcu_gui/app/components/digit_segment.cpp \
+    ../mcu_gui/app/gauges/gauge.cpp \
+    ../mcu_gui/app/gauges/lamp.cpp \
     ../mcu_gui/app/gauges/segment_indicator.cpp \
+    ../mcu_gui/core/layout.cpp \
     ../mcu_gui/core/painter.cpp \
     ../mcu_gui/core/widget.cpp \
     main.cpp \
@@ -26,9 +29,12 @@ SOURCES += \
 
 HEADERS += \
     ../mcu_gui/app/components/digit_segment.h \
+    ../mcu_gui/app/components/lamps.h \
+    ../mcu_gui/app/gauges/gauge.h \
+    ../mcu_gui/app/gauges/lamp.h \
     ../mcu_gui/app/gauges/segment_indicator.h \
     ../mcu_gui/core/color32.h \
-    ../mcu_gui/core/gauge.h \
+    ../mcu_gui/core/layout.h \
     ../mcu_gui/core/painter.h \
     ../mcu_gui/core/primitives.h \
     ../mcu_gui/core/types.h \

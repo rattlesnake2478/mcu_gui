@@ -1,7 +1,7 @@
 #ifndef GAUGE_H
 #define GAUGE_H
 
-#include "widget.h"
+#include "../../core/widget.h"
 
 namespace McuGui {
 

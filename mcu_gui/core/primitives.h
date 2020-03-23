@@ -3,6 +3,8 @@
 
 #include "types.h"
 
+#include <vector>
+
 namespace McuGui {
 
     struct Point {
@@ -47,6 +49,16 @@ namespace McuGui {
             bottom_right = {(CoordType)(start.x + width), (CoordType)(start.y + height)};
         }
     };
+
+    struct Mask {
+        uint16_t width;
+        uint16_t height;
+        std::vector<uint32_t> data;
+
+        Mask(uint16_t w, uint16_t h, std::vector<uint32_t> v):width(w), height(h), data(v) {};
+    };
+
+
 
 
 } //end namespace McuGui

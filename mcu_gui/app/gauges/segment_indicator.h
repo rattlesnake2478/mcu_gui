@@ -1,7 +1,7 @@
 #ifndef SEGMENTINDICATOR_H
 #define SEGMENTINDICATOR_H
 
-#include "../../core/gauge.h"
+#include "gauge.h"
 #include "../components/digit_segment.h"
 
 namespace McuGui {

@@ -13,16 +13,13 @@ public:
     void setPen(Color color) { pen_ = color; };
 
     // overloaded draw
-    void draw(Point point) { drawPoint(point); }
-    void draw(Line line) { drawLine(line); }
-    void draw(Rectangle rectangle) { drawRectangle(rectangle); }
-    void draw(Triangle triangle) { drawTriangle(triangle); }
+    virtual void draw(Point point);
+    virtual void draw(Line line) = 0;
+    virtual void draw(Rectangle rectangle) = 0;
+    virtual void draw(Triangle triangle) = 0;
+    virtual void draw(const Mask& mask);
 
     // functions to overide
-    virtual void drawPoint(Point point);
-    virtual void drawLine(Line line) = 0;
-    virtual void drawTriangle(Triangle triangle) = 0;
-    virtual void drawRectangle(Rectangle rectangle) = 0;
     void setLocalOrigin(Position pos) { origin_ = pos; };
     Position getLocalOrigin() const { return origin_; };
 
@@ -36,9 +33,11 @@ protected:
 class GeometricPainter: public AbstractPainter {
 public:
     using AbstractPainter::AbstractPainter;
-    virtual void drawLine(Line line) override;
-    virtual void drawTriangle(Triangle triangle) override;
-    virtual void drawRectangle(Rectangle rectangle) override;
+    virtual void draw(Point point) override { AbstractPainter::draw(point); };
+    virtual void draw(const Mask& mask) override { AbstractPainter::draw(mask); };
+    virtual void draw(Line line) override;
+    virtual void draw(Triangle triangle) override;
+    virtual void draw(Rectangle rectangle) override;
 
 protected:
     using AbstractPainter::plot;

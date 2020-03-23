@@ -3,7 +3,8 @@
 #include <QPainter>
 #include <QTimer>
 
-#include "../mcu_gui/app/gauges/segment_indicator.h"
+#include "../mcu_gui/app/gauges/lamp.h"
+#include "../mcu_gui/core/layout.h"
 
 using namespace McuGui;
 
@@ -21,11 +22,39 @@ MainWindow::MainWindow(uint16_t width, uint16_t height)
     buffer_ = new McuGui::Color[width * height];
 
     MemoryPainter painter(buffer_);
-    painter.setLocalOrigin({240, 136}); // center
+    painter.setLocalOrigin({0, 50});
 
-    MultiSegmentIndicator indicator;
-    indicator.setValue(-117);
-    indicator.paint(painter);
+    GridLayout layout(Lamp::StandartDimension, 3, 2);
+    auto ltLamp = LeftTurnLamp();
+    auto rtLamp = RightTurnLamp();
+    auto nLamp= NeutralLamp();
+    auto hLamp = HighBeamLamp();
+    auto bLamp = BatteryLamp();
+    auto tLamp = TempLamp();
+    layout.addWidget(&ltLamp, 0, 0);
+    layout.addWidget(&rtLamp, 0, 1);
+    layout.addWidget(&nLamp, 1, 0);
+    layout.addWidget(&hLamp, 1, 1);
+    layout.addWidget(&bLamp, 2, 0);
+    layout.addWidget(&tLamp, 2, 1);
+
+    ltLamp.setValue(true);
+    rtLamp.setValue(true);
+    nLamp.setValue(true);
+    hLamp.setValue(true);
+    bLamp.setValue(true);
+    tLamp.setValue(true);
+
+    layout.paint(painter);
+
+//    painter.setLocalOrigin({240, 136}); // center
+//    TempLamp lamp1;
+//    TempLamp lamp2;
+//    lamp1.setValue(true);
+//    lamp1.paint(painter);
+//    painter.setLocalOrigin({290, 136});
+//    lamp2.paint(painter);
+
 }
 
 MainWindow::~MainWindow()
