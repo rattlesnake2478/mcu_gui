@@ -30,6 +30,28 @@ protected:
     CoordType margin_;
 };
 
+class HLayout: public GridLayout {
+public:
+    HLayout(Dimension cell_size, uint8_t cols = 4, CoordType margin = 10):
+        GridLayout(cell_size, 1, cols, margin)
+    {};
+
+    bool addWidget(AbstractWidget* w, uint8_t col) {
+        return GridLayout::addWidget(w, 0, col);
+    }
+};
+
+class VLayout: public GridLayout {
+public:
+    VLayout(Dimension cell_size, uint8_t rows = 4, CoordType margin = 10):
+        GridLayout(cell_size, rows, 1, margin)
+    {};
+
+    bool addWidget(AbstractWidget* w, uint8_t row) {
+        return GridLayout::addWidget(w, row, 0);
+    }
+};
+
 } // End namespace McuGui
 
 #endif // LAYOUT_H

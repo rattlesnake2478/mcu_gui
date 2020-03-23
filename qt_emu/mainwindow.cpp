@@ -24,19 +24,20 @@ MainWindow::MainWindow(uint16_t width, uint16_t height)
     MemoryPainter painter(buffer_);
     painter.setLocalOrigin({0, 50});
 
-    GridLayout layout(Lamp::StandartDimension, 3, 2);
+    HLayout layout1(Lamp::StandartDimension, 3);
+    VLayout layout2(Lamp::StandartDimension, 3);
     auto ltLamp = LeftTurnLamp();
     auto rtLamp = RightTurnLamp();
     auto nLamp= NeutralLamp();
     auto hLamp = HighBeamLamp();
     auto bLamp = BatteryLamp();
     auto tLamp = TempLamp();
-    layout.addWidget(&ltLamp, 0, 0);
-    layout.addWidget(&rtLamp, 0, 1);
-    layout.addWidget(&nLamp, 1, 0);
-    layout.addWidget(&hLamp, 1, 1);
-    layout.addWidget(&bLamp, 2, 0);
-    layout.addWidget(&tLamp, 2, 1);
+    layout1.addWidget(&ltLamp, 0);
+    layout1.addWidget(&rtLamp, 1);
+    layout1.addWidget(&nLamp, 2);
+    layout2.addWidget(&hLamp, 0);
+    layout2.addWidget(&bLamp, 1);
+    layout2.addWidget(&tLamp, 2);
 
     ltLamp.setValue(true);
     rtLamp.setValue(true);
@@ -45,15 +46,9 @@ MainWindow::MainWindow(uint16_t width, uint16_t height)
     bLamp.setValue(true);
     tLamp.setValue(true);
 
-    layout.paint(painter);
-
-//    painter.setLocalOrigin({240, 136}); // center
-//    TempLamp lamp1;
-//    TempLamp lamp2;
-//    lamp1.setValue(true);
-//    lamp1.paint(painter);
-//    painter.setLocalOrigin({290, 136});
-//    lamp2.paint(painter);
+    layout2.paint(painter);
+    painter.setLocalOrigin({240, 136});
+    layout1.paint(painter);
 
 }
 
