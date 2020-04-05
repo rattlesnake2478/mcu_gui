@@ -10,12 +10,12 @@ namespace McuGui {
 
 class AbstractWidget {
 public:
-    virtual void paint(AbstractPainter& painter) const = 0;
+    virtual void paint(PainterInterface& painter) const = 0;
 };
 
 class WidgetContainer: public AbstractWidget {
 public:
-    virtual void paint(AbstractPainter& painter) const;
+    virtual void paint(PainterInterface& painter) const;
 protected:
     struct Element {
         Position pos;

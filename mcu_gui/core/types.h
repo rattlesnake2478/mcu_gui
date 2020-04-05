@@ -2,6 +2,7 @@
 #define TYPES_H
 
 #include <inttypes.h>
+#include <vector>
 
 namespace McuGui {
 
@@ -26,11 +27,24 @@ struct Position {
         CoordType res_y = (CoordType)y*value;
         return {res_x, res_y};
     }
+    void swapCoord() {
+        CoordType temp = x;
+        x = y;
+        y = temp;
+    }
 };
 
 struct Dimension {
     SizeType w;
     SizeType h;
+};
+
+struct Mask {
+    uint16_t width;
+    uint16_t height;
+    std::vector<uint32_t> data;
+
+    Mask(uint16_t w, uint16_t h, std::vector<uint32_t> v):width(w), height(h), data(v) {};
 };
 
 const Dimension DISPLAY_480_272 = {480, 272};

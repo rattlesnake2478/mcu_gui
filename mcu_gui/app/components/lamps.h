@@ -1,7 +1,7 @@
 #ifndef LAMPS_H
 #define LAMPS_H
 
-#include "../../core/primitives.h"
+#include "../../core/types.h"
 
 namespace McuGui {
 

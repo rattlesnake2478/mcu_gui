@@ -16,7 +16,7 @@ public:
         size_(size),
         vert_(DigitSegment(DigitSegment::Vertical, size,  color, border)),
         horiz_(DigitSegment(DigitSegment::Horizontal, size, color, border)) {};
-    virtual void paint(AbstractPainter& painter) const override;
+    virtual void paint(PainterInterface& painter) const override;
 
 protected:
     // segment definition and map
@@ -39,7 +39,7 @@ protected:
     constexpr static SegmentMap D9 = {SegmentType::A, SegmentType::F, SegmentType::G, SegmentType::B, SegmentType::C, SegmentType::D};
     constexpr static std::array<SegmentMap, 10> VAL_TO_SEGMENTS = {D0, D1, D2, D3, D4, D5, D6, D7, D8, D9};
 
-    void drawSegment(AbstractPainter& painter, SegmentType segment) const;
+    void drawSegment(PainterInterface& painter, SegmentType segment) const;
 
     DigitSegment::Size size_;
     DigitSegment vert_;
@@ -56,7 +56,7 @@ public:
         size_(size),
         indicator_(SegmentIndicator(size, color, border)),
         dash_(DigitSegment(DigitSegment::Horizontal, size,  color, border)) {};
-    virtual void paint(AbstractPainter& painter) const override;
+    virtual void paint(PainterInterface& painter) const override;
 protected:
     DigitSegment::Size size_;
     mutable SegmentIndicator indicator_;

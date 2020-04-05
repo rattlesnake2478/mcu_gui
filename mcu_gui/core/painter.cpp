@@ -7,21 +7,17 @@
 using namespace McuGui;
 
 void
-AbstractPainter::draw(Point point) {
-    Position pos = point.pos() + origin_;
-    if (pos.x >= 0 && pos.x < area_.w &&
-        pos.y >= 0 && pos.y < area_.h) {
-        plot(pos.x, pos.y, pen_);
-    }
+SimplePainter::drawPoint(Position pos) const {
+    engine_.plot(pos.x, pos.y, pen_);
 }
 
 void
-AbstractPainter::draw(const Mask& mask) {
+SimplePainter::drawMask(const Mask& mask) const {
     uint8_t shift = 0;
     uint8_t chunk = 0;
-    for (uint16_t i = 0; i < mask.width; ++i)
+    for (uint16_t i = 0; i < mask.width; ++i) {
         for (uint16_t j = 0; j < mask.height; ++j) {
-            if((1 << (31 - shift)) & mask.data[chunk]) draw(Point(j, i));
+            if((1 << (31 - shift)) & mask.data[chunk]) drawPoint({(CoordType)j, (CoordType)i});
             ++shift;
             if (shift >= 32) {
                 shift = 0;
@@ -29,46 +25,43 @@ AbstractPainter::draw(const Mask& mask) {
             }
             if (chunk >- mask.data.size()) return;
         }
+    }
 }
 
 void
-GeometricPainter::draw(Line line) {
+SimplePainter::drawLine(Position start, Position end) const {
     bool steep = false;
-    if (std::abs(line.start.x-line.end.x) < std::abs(line.start.y-line.end.y)) {
-        std::swap(line.start.x, line.start.y);
-        std::swap(line.end.x, line.end.y);
+    if (std::abs(start.x-end.x) < std::abs(start.y-end.y)) {
+        std::swap(start.x, start.y);
+        std::swap(end.x, end.y);
         steep = true;
     }
-    if (line.start.x > line.end.x) {
-        std::swap(line.start.x, line.end.x);
-        std::swap(line.start.y, line.end.y);
+    if (start.x > end.x) {
+        std::swap(start.x, end.x);
+        std::swap(start.y, end.y);
     }
-    CoordType dx = line.end.x - line.start.x;
-    CoordType dy = line.end.y - line.start.y;
+    CoordType dx = end.x - start.x;
+    CoordType dy = end.y - start.y;
     CoordType derror2 = std::abs(dy)*2;
     CoordType error2 = 0;
-    CoordType y = line.start.y;
-    for (CoordType x = line.start.x; x <= line.end.x; x++) {
+    CoordType y = start.y;
+    for (CoordType x = start.x; x <= end.x; x++) {
         if (steep) {
-            draw(Point(y, x));
+            drawPoint({y, x});
         } else {
-            draw(Point(x, y));
+            drawPoint({x, y});
         }
         error2 += derror2;
 
         if (error2 > dx) {
-            y += (line.end.y > line.start.y ? 1 : -1);
+            y += (end.y > start.y ? 1 : -1);
             error2 -= dx * 2;
         }
     }
 }
 
 void
-GeometricPainter::draw(Triangle triangle) {
-    auto v1 = triangle.p1.pos();
-    auto v2 = triangle.p2.pos();
-    auto v3 = triangle.p3.pos();
-
+SimplePainter::drawTriangle(Position v1, Position v2, Position v3) const {
     if (v1.y==v2.y && v1.y==v3.y) return;
     if (v1.y>v2.y) std::swap(v1, v2);
     if (v1.y>v3.y) std::swap(v1, v3);
@@ -84,26 +77,45 @@ GeometricPainter::draw(Triangle triangle) {
         Position B = second_half ? v2 + (v3-v2)*beta : v1 + (v2-v1)*beta;
         if (A.x>B.x) std::swap(A, B);
         for (CoordType j=A.x; j<=B.x; j++) {
-            Point p;
-            p.x = j;
-            p.y = v1.y+i;
-            draw(p);
+            drawPoint({j, (CoordType)(v1.y+i)});
         }
     }
 }
 
 void
-GeometricPainter::draw(Rectangle rectangle) {
-    for (CoordType y = rectangle.top_left.y; y <= rectangle.bottom_right.y; ++y) {
-        for(CoordType x = rectangle.top_left.x; x <= rectangle.bottom_right.x; ++x) {
-            draw(Point(x, y));
+MovedPainter::drawPoint(Position pos) const {
+    base_.drawPoint(convertPosition(pos));
+}
+
+void
+MovedPainter::drawLine(Position start, Position end) const {
+    base_.drawLine(convertPosition(start), convertPosition(end));
+}
+
+void
+MovedPainter::drawTriangle(Position v1, Position v2, Position v3) const {
+    base_.drawTriangle(convertPosition(v1), convertPosition(v2), convertPosition(v3));
+}
+
+void
+MovedPainter::drawMask(const Mask& mask) const {
+    // copies original method. TODO: rework
+    uint8_t shift = 0;
+    uint8_t chunk = 0;
+    for (uint16_t i = 0; i < mask.width; ++i) {
+        for (uint16_t j = 0; j < mask.height; ++j) {
+            if((1 << (31 - shift)) & mask.data[chunk]) drawPoint({(CoordType)j, (CoordType)i});
+            ++shift;
+            if (shift >= 32) {
+                shift = 0;
+                ++chunk;
+            }
+            if (chunk >- mask.data.size()) return;
         }
     }
 }
 
-void
-MemoryPainter::
-plot(CoordType x, CoordType y, Color color) {
-  ptr_[y * area_.w + x] = color;
+Position
+MovedPainter::convertPosition(Position pos) const {
+    return {(CoordType)(pos.x + dx_), (CoordType)(pos.y + dy_)};
 }
-

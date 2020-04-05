@@ -4,7 +4,7 @@
 #include <QTimer>
 
 #include "../mcu_gui/app/gauges/lamp.h"
-#include "../mcu_gui/core/layout.h"
+#include "../mcu_gui/app/gauges/segment_indicator.h"
 #include "../mcu_gui/core/linear/matrix.h"
 
 using namespace McuGui;
@@ -22,19 +22,12 @@ MainWindow::MainWindow(uint16_t width, uint16_t height)
     mainImage_ = new QImage(width, height, QImage::Format_RGB32);
     buffer_ = new McuGui::Color[width * height];
 
-    const Triangle tr{{0, 20}, {10, 20}, {5, 0}};
+    MemoryPaintEngine engine(buffer_);
+    SimplePainter painter(engine);
 
 
-    auto verts = FloatMatrix::fromVertexes({tr.p1.pos(), tr.p2.pos(), tr.p3.pos()});
-    auto move = TransformMatrix::move(50, 100);
-    auto rotate = TransformMatrix::rotate(45);
-    auto result = verts * rotate * move;
-    auto newVerts = result.toVertexes();
-
-    MemoryPainter painter(buffer_);
-    painter.setPen(COLOR_RED);
-    painter.draw(Triangle{Point{newVerts[0]}, Point{newVerts[1]}, Point{newVerts[2]}});
-
+    MovedPainter painter2(painter, 200, 150);
+    painter2.drawPoint({0, 0});
 
 }
 

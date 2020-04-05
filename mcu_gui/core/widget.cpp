@@ -3,10 +3,8 @@
 using namespace McuGui;
 
 void
-WidgetContainer::paint(AbstractPainter& painter) const {
-    Position origin = painter.getLocalOrigin();
+WidgetContainer::paint(PainterInterface& painter) const {
     for (const auto& element: elements_) {
-        painter.setLocalOrigin(origin + element.pos);
         element.element->paint(painter);
     }
 }

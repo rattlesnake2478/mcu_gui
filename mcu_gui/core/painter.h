@@ -1,58 +1,59 @@
 #ifndef PAINTER_H
 #define PAINTER_H
 
-#include "primitives.h"
-#include "color32.h"
+#include "linear/matrix.h"
+#include "paint_engine.h"
 
 namespace McuGui {
 
-class AbstractPainter {
+class PainterInterface {
 public:
-    AbstractPainter(): area_(DEFAULT_DISPLAY), pen_(COLOR_WHITE) {};
-    explicit AbstractPainter(Dimension area): area_(area), pen_(COLOR_WHITE) {};
-    void setPen(Color color) { pen_ = color; };
+    // coloring
+    virtual void setPen(Color color) = 0;
 
-    // overloaded draw
-    virtual void draw(Point point);
-    virtual void draw(Line line) = 0;
-    virtual void draw(Rectangle rectangle) = 0;
-    virtual void draw(Triangle triangle) = 0;
-    virtual void draw(const Mask& mask);
-
-    // functions to overide
-    void setLocalOrigin(Position pos) { origin_ = pos; };
-    Position getLocalOrigin() const { return origin_; };
-
-protected:
-    virtual void plot(CoordType x, CoordType y, Color c) = 0;
-    Position origin_;
-    const Dimension area_;
-    Color pen_;
+    // drawing
+    virtual void drawPoint(Position pos) const = 0;
+    virtual void drawLine(Position start, Position end) const = 0;
+    virtual void drawTriangle(Position v1, Position v2, Position v3) const = 0;
+    virtual void drawMask(const Mask& mask) const = 0;
 };
 
-class GeometricPainter: public AbstractPainter {
+class SimplePainter: public PainterInterface {
 public:
-    using AbstractPainter::AbstractPainter;
-    virtual void draw(Point point) override { AbstractPainter::draw(point); };
-    virtual void draw(const Mask& mask) override { AbstractPainter::draw(mask); };
-    virtual void draw(Line line) override;
-    virtual void draw(Triangle triangle) override;
-    virtual void draw(Rectangle rectangle) override;
+    SimplePainter(PaintEngineInterface& engine): engine_(engine) {};
+
+    virtual void setPen(Color color) override { pen_ = color; };
+
+    virtual void drawPoint(Position pos) const override;
+    virtual void drawLine(Position start, Position end) const override;
+    virtual void drawTriangle(Position v1, Position v2, Position v3) const override;
+    virtual void drawMask(const Mask& mask) const override;
 
 protected:
-    using AbstractPainter::plot;
+    const PaintEngineInterface& engine_;
+    Color pen_ = COLOR_WHITE;
 };
 
-class MemoryPainter: public GeometricPainter {
+class MovedPainter: public PainterInterface {
 public:
-    explicit MemoryPainter(Color* ptr): GeometricPainter(), ptr_(ptr) {};
+    MovedPainter(PainterInterface& base, CoordType dx, CoordType dy)
+        : base_(base), dx_(dx), dy_(dy) {}
+
+    // coloring
+    virtual void setPen(Color color) override { base_.setPen(color); };
+
+    // drawing
+    virtual void drawPoint(Position pos) const override;
+    virtual void drawLine(Position start, Position end) const override;
+    virtual void drawTriangle(Position v1, Position v2, Position v3) const override;
+    virtual void drawMask(const Mask& mask) const override;
 
 protected:
-    virtual void plot(CoordType x, CoordType y, Color c) override;
-    Color* const ptr_;
-};
+    Position convertPosition(Position pos) const;
+    PainterInterface& base_;
+    CoordType dx_, dy_;
 
-// TODO: Inverted memory painter - to draw y from bottom
+};
 
 } // end namespace McuGui
 

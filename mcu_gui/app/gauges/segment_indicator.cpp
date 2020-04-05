@@ -5,19 +5,17 @@ using namespace McuGui;
 constexpr std::array<SegmentIndicator::SegmentMap, 10> SegmentIndicator::VAL_TO_SEGMENTS;
 
 void
-SegmentIndicator::paint(AbstractPainter& painter) const {
+SegmentIndicator::paint(PainterInterface& painter) const {
     uint8_t value = value_ > 9 ? 9 : value_;
-    auto origin = painter.getLocalOrigin();
     for(const auto& segment: VAL_TO_SEGMENTS[value]) {
         if ( segment >= SegmentType::A && segment <= SegmentType::G) {
-            painter.setLocalOrigin(origin); // restore gauge origin
             drawSegment(painter, segment);
         }
     }
 }
 
 void
-SegmentIndicator::drawSegment(AbstractPainter& painter, SegmentType segment) const {
+SegmentIndicator::drawSegment(PainterInterface& painter, SegmentType segment) const {
     Position segment_pos;
     const DigitSegment *segment_ptr;
     const auto dim = DigitSegment::getSize(size_);
@@ -60,13 +58,12 @@ SegmentIndicator::drawSegment(AbstractPainter& painter, SegmentType segment) con
         };
     break;
     }
-    painter.setLocalOrigin(painter.getLocalOrigin() + segment_pos);
-    segment_ptr->paint(painter);
+    MovedPainter pnt(painter, segment_pos.x, segment_pos.y);
+    segment_ptr->paint(pnt);
 }
 
 void
-MultiSegmentIndicator::paint(AbstractPainter& painter) const {
-    auto origin = painter.getLocalOrigin();
+MultiSegmentIndicator::paint(PainterInterface& painter) const {
     uint16_t next_value = std::abs(value_);
     uint8_t offset_pos = 0;
     const auto segment_dim = DigitSegment::getSize(size_);
@@ -76,14 +73,14 @@ MultiSegmentIndicator::paint(AbstractPainter& painter) const {
         segment_value = next_value % 10;
         next_value = next_value / 10;
         indicator_.setValue(segment_value);
-        painter.setLocalOrigin(origin - Position{(CoordType)(offset * offset_pos), 0});
-        indicator_.paint(painter);
+        MovedPainter pnt(painter, (CoordType)(-offset * offset_pos), 0);
+        indicator_.paint(pnt);
         ++offset_pos;
     } while (next_value);
     if (value_ < 0) {
         CoordType dash_x_offset = segment_value == 1 ? offset * offset_pos - segment_dim.w * 2 : offset * offset_pos + segment_dim.w;
-        painter.setLocalOrigin(origin - Position{dash_x_offset, (CoordType)(segment_dim.h + segment_dim.w)});
-        dash_.paint(painter);
+        MovedPainter pnt(painter, - dash_x_offset, (CoordType)(-segment_dim.h - segment_dim.w));
+        dash_.paint(pnt);
     }
 }
 

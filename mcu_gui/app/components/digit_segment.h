@@ -32,7 +32,7 @@ public:
     DigitSegment(Type type, Size size = Size::Mid, Color color = COLOR_RED, Color border = COLOR_WHITE):
         type_(type), color_(color), border_(border), size_(size) { };
 
-    virtual void paint(AbstractPainter &painter) const override;
+    virtual void paint(PainterInterface& painter) const override;
 
 protected:
     Type type_;

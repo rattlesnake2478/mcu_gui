@@ -28,7 +28,7 @@ public:
         inactive_glyph_color_(inactive_glyph_color)
     { setValue(false); };
 
-    virtual void paint(AbstractPainter& painter) const override;
+    virtual void paint(PainterInterface& painter) const override;
 
 protected:
     const Mask& glyph_;
