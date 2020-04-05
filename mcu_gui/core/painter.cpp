@@ -83,22 +83,22 @@ SimplePainter::drawTriangle(Position v1, Position v2, Position v3) const {
 }
 
 void
-MovedPainter::drawPoint(Position pos) const {
+PainterDecorator::drawPoint(Position pos) const {
     base_.drawPoint(convertPosition(pos));
 }
 
 void
-MovedPainter::drawLine(Position start, Position end) const {
+PainterDecorator::drawLine(Position start, Position end) const {
     base_.drawLine(convertPosition(start), convertPosition(end));
 }
 
 void
-MovedPainter::drawTriangle(Position v1, Position v2, Position v3) const {
+PainterDecorator::drawTriangle(Position v1, Position v2, Position v3) const {
     base_.drawTriangle(convertPosition(v1), convertPosition(v2), convertPosition(v3));
 }
 
 void
-MovedPainter::drawMask(const Mask& mask) const {
+PainterDecorator::drawMask(const Mask& mask) const {
     // copies original method. TODO: rework
     uint8_t shift = 0;
     uint8_t chunk = 0;
@@ -118,4 +118,43 @@ MovedPainter::drawMask(const Mask& mask) const {
 Position
 MovedPainter::convertPosition(Position pos) const {
     return {(CoordType)(pos.x + dx_), (CoordType)(pos.y + dy_)};
+}
+
+void
+TransformedPainter::drawPoint(Position pos) const {
+    auto vertexMatrix = FloatMatrix::fromVertexes({pos});
+    auto result = (vertexMatrix * transform_).toVertexes();
+    base_.drawPoint(result[0]);
+}
+
+void
+TransformedPainter::drawLine(Position start, Position end) const {
+    auto vertexMatrix = FloatMatrix::fromVertexes({start, end});
+    auto result = (vertexMatrix * transform_).toVertexes();
+    base_.drawLine(result[0], result[1]);
+}
+
+void
+TransformedPainter::drawTriangle(Position v1, Position v2, Position v3) const {
+    auto vertexMatrix = FloatMatrix::fromVertexes({v1, v2, v3});
+    auto result = (vertexMatrix * transform_).toVertexes();
+    base_.drawTriangle(result[0], result[1], result[2]);
+}
+
+void
+TransformedPainter::drawMask(const Mask& mask) const {
+    // copies original method. TODO: rework
+    uint8_t shift = 0;
+    uint8_t chunk = 0;
+    for (uint16_t i = 0; i < mask.width; ++i) {
+        for (uint16_t j = 0; j < mask.height; ++j) {
+            if((1 << (31 - shift)) & mask.data[chunk]) drawPoint({(CoordType)j, (CoordType)i});
+            ++shift;
+            if (shift >= 32) {
+                shift = 0;
+                ++chunk;
+            }
+            if (chunk >- mask.data.size()) return;
+        }
+    }
 }

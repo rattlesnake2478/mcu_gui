@@ -25,9 +25,17 @@ MainWindow::MainWindow(uint16_t width, uint16_t height)
     MemoryPaintEngine engine(buffer_);
     SimplePainter painter(engine);
 
-
-    MovedPainter painter2(painter, 200, 150);
+    TransformedPainter painter2(painter, TransformMatrix::rotate(15) * TransformMatrix::move(300, 100));
     painter2.drawPoint({0, 0});
+    MultiSegmentIndicator ind;
+    ind.setValue(-142);
+    ind.paint(painter2);
+
+    TransformedPainter painter3(painter, TransformMatrix::rotate(15) * TransformMatrix::move(300, 200));
+    HighBeamLamp hbl;
+    hbl.setValue(true);
+    hbl.paint(painter3);
+    painter3.drawPoint({0, 0});
 
 }
 

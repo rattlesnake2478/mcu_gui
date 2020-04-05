@@ -2,7 +2,6 @@
 #define MATRIX_H
 
 #include "../types.h"
-#include <initializer_list>
 #include <vector>
 
 namespace McuGui {
@@ -12,20 +11,13 @@ public:
     typedef uint8_t SizeType;
     AbstractMatrix(AbstractMatrix& other) = default;
 
-    AbstractMatrix(SizeType rows, SizeType cols): rows_(rows), cols_(cols) {
-        data_ = new T[rows*cols];
+    AbstractMatrix(SizeType rows, SizeType cols)
+        : rows_(rows), cols_(cols), data_(rows * cols) {
         for (size_t i = 0; i < rows * cols; ++i) data_[i] = 0;
     }
-    AbstractMatrix(SizeType rows, SizeType cols, std::initializer_list<T> vals)
-        :AbstractMatrix(rows, cols)
-    {
-        size_t val_num = rows * cols > vals.size() ? vals.size() : rows * cols;
-        auto it = vals.begin();
-        for (size_t i = 0; i < val_num; ++i) data_[i] = *(it++);
-    }
-    virtual ~AbstractMatrix() {
-        delete[] data_;
-    }
+    AbstractMatrix(SizeType rows, SizeType cols, std::vector<T> data)
+        :rows_(rows), cols_(cols), data_(data) { }
+
     SizeType rows() const { return rows_; }
     SizeType cols() const { return cols_; }
     T getAt(SizeType row, SizeType col) const {
@@ -38,12 +30,13 @@ public:
     }
 
     AbstractMatrix<T> operator* (const AbstractMatrix<T>& other) {
+        // TODO: add dimension check
         AbstractMatrix<T> result(rows_, other.cols_);
         for (SizeType i = 0; i < rows_; ++i) {
-            T* c = result.data_ + i * other.cols_;
+            T* c = result.data_.data() + i * other.cols_;
             for (SizeType j = 0; j < other.cols_; ++j) c[j] = 0;
             for (SizeType k = 0; k < other.rows_; ++k) {
-                const T* b = other.data_ + k * other.cols_;
+                const T* b = other.data_.data() + k * other.cols_;
                 T a = data_[i*cols_ + k];
                 for (SizeType j = 0; j < other.rows(); ++j)
                     c[j] += a * b[j];
@@ -88,7 +81,7 @@ protected:
     size_t calculateOffset(SizeType row, SizeType col) const {
         return col + rows_ * row;
     }
-    T* data_;
+    std::vector<T> data_;
 };
 
 typedef AbstractMatrix<float> FloatMatrix;
