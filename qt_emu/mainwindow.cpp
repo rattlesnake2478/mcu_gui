@@ -5,6 +5,7 @@
 
 #include "../mcu_gui/app/gauges/lamp.h"
 #include "../mcu_gui/core/layout.h"
+#include "../mcu_gui/core/linear/matrix.h"
 
 using namespace McuGui;
 
@@ -21,34 +22,19 @@ MainWindow::MainWindow(uint16_t width, uint16_t height)
     mainImage_ = new QImage(width, height, QImage::Format_RGB32);
     buffer_ = new McuGui::Color[width * height];
 
+    const Triangle tr{{0, 20}, {10, 20}, {5, 0}};
+
+
+    auto verts = FloatMatrix::fromVertexes({tr.p1.pos(), tr.p2.pos(), tr.p3.pos()});
+    auto move = TransformMatrix::move(50, 100);
+    auto rotate = TransformMatrix::rotate(45);
+    auto result = verts * rotate * move;
+    auto newVerts = result.toVertexes();
+
     MemoryPainter painter(buffer_);
-    painter.setLocalOrigin({0, 50});
+    painter.setPen(COLOR_RED);
+    painter.draw(Triangle{Point{newVerts[0]}, Point{newVerts[1]}, Point{newVerts[2]}});
 
-    HLayout layout1(Lamp::StandartDimension, 3);
-    VLayout layout2(Lamp::StandartDimension, 3);
-    auto ltLamp = LeftTurnLamp();
-    auto rtLamp = RightTurnLamp();
-    auto nLamp= NeutralLamp();
-    auto hLamp = HighBeamLamp();
-    auto bLamp = BatteryLamp();
-    auto tLamp = TempLamp();
-    layout1.addWidget(&ltLamp, 0);
-    layout1.addWidget(&rtLamp, 1);
-    layout1.addWidget(&nLamp, 2);
-    layout2.addWidget(&hLamp, 0);
-    layout2.addWidget(&bLamp, 1);
-    layout2.addWidget(&tLamp, 2);
-
-    ltLamp.setValue(true);
-    rtLamp.setValue(true);
-    nLamp.setValue(true);
-    hLamp.setValue(true);
-    bLamp.setValue(true);
-    tLamp.setValue(true);
-
-    layout2.paint(painter);
-    painter.setLocalOrigin({240, 136});
-    layout1.paint(painter);
 
 }
 

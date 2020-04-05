@@ -21,6 +21,7 @@ SOURCES += \
     ../mcu_gui/app/gauges/lamp.cpp \
     ../mcu_gui/app/gauges/segment_indicator.cpp \
     ../mcu_gui/core/layout.cpp \
+    ../mcu_gui/core/linear/matrix.cpp \
     ../mcu_gui/core/painter.cpp \
     ../mcu_gui/core/widget.cpp \
     main.cpp \
@@ -35,6 +36,7 @@ HEADERS += \
     ../mcu_gui/app/gauges/segment_indicator.h \
     ../mcu_gui/core/color32.h \
     ../mcu_gui/core/layout.h \
+    ../mcu_gui/core/linear/matrix.h \
     ../mcu_gui/core/painter.h \
     ../mcu_gui/core/primitives.h \
     ../mcu_gui/core/types.h \
