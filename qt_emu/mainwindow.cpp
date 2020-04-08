@@ -3,9 +3,7 @@
 #include <QPainter>
 #include <QTimer>
 
-#include "../mcu_gui/app/gauges/lamp.h"
-#include "../mcu_gui/app/gauges/segment_indicator.h"
-#include "../mcu_gui/core/linear/matrix.h"
+#include "../mcu_gui/core/font/font.h"
 
 using namespace McuGui;
 
@@ -25,17 +23,10 @@ MainWindow::MainWindow(uint16_t width, uint16_t height)
     MemoryPaintEngine engine(buffer_);
     SimplePainter painter(engine);
 
-    TransformedPainter painter2(painter, TransformMatrix::rotate(15) * TransformMatrix::move(300, 100));
+    TransformedPainter painter2(painter, TransformMatrix::rotate(0) * TransformMatrix::move(300, 100));
     painter2.drawPoint({0, 0});
-    MultiSegmentIndicator ind;
-    ind.setValue(-142);
-    ind.paint(painter2);
-
-    TransformedPainter painter3(painter, TransformMatrix::rotate(15) * TransformMatrix::move(300, 200));
-    HighBeamLamp hbl;
-    hbl.setValue(true);
-    hbl.paint(painter3);
-    painter3.drawPoint({0, 0});
+    Label lbl("A B", FontType::MONOTYPE_MID_FONT);
+    lbl.paint(painter2);
 
 }
 
