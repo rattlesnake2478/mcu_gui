@@ -9,7 +9,6 @@ namespace McuGui {
 template <typename T> class AbstractMatrix {
 public:
     typedef uint8_t SizeType;
-    AbstractMatrix(AbstractMatrix& other) = default;
 
     AbstractMatrix(SizeType rows, SizeType cols)
         : rows_(rows), cols_(cols), data_(rows * cols) {

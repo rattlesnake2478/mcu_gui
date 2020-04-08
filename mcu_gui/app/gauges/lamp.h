@@ -6,13 +6,15 @@
 
 namespace McuGui {
 
+
+
 class Lamp: public AbstractGauge<bool> {
 public:
     enum Type {
        SQARE = 1,
     };
 
-    inline static const Dimension StandartDimension = {40, 40};
+    const Dimension StandartDimension = {40, 40};
 
     Lamp(const Mask& glyph,
          Type type = Type::SQARE,
