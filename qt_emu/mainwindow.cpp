@@ -23,9 +23,9 @@ MainWindow::MainWindow(uint16_t width, uint16_t height)
     MemoryPaintEngine engine(buffer_);
     SimplePainter painter(engine);
 
-    TransformedPainter painter2(painter, TransformMatrix::rotate(0) * TransformMatrix::move(300, 100));
-    painter2.drawPoint({0, 0});
-    Label lbl("A B", FontType::MONOTYPE_MID_FONT);
+    TransformedPainter painter2(painter, TransformMatrix::rotate(0) * TransformMatrix::move(50, 50));
+
+    Label lbl("Test message! Hello, World!", FontType::VERDANA_MID_BOLD);
     lbl.paint(painter2);
 
 }

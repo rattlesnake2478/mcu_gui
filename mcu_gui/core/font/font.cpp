@@ -1,39 +1,54 @@
 #include "font.h"
-#include "monotype_8x8.h"
-#include "monotype_16x16.h"
+#include "verdana.h"
 
 using namespace McuGui;
 
+AbstractFont::AbstractFont(
+        const unsigned char* ascii,
+        const unsigned char* rus,
+        Dimension ascii_dim,
+        Dimension rus_dim)
+    : ascii_ptr_(ascii), rus_ptr_(rus), ascii_dim_(ascii_dim), rus_dim_(rus_dim){};
+
+
+// Too complex. TODO: rework to separate writers with own dimensions and render logic
 CoordType
-MonotypeTinyFont::paintChar(const char& ch, PainterInterface& painter) const {
-    const size_t offset = ch * 8;
-    for(uint8_t row = 0; row < 8; ++row) {
-        auto data = MONOTYPE_TINY[offset + row];
-        for (uint8_t col = 0; col < 8; ++col) {
-            if (data & 1 << (7 - col)) painter.drawPoint({col, row});
+AbstractFont::paintChar(const unsigned char& ch, PainterInterface& painter) const {
+    if ( (ch < 32 || ch > 127) && (ch < 192 )) return 0; // char is out of font
+    const uint8_t* base_ptr = (ch >= 192) ?  rus_ptr_ : ascii_ptr_;
+    const Dimension& dim = (ch >= 192) ? rus_dim_ : ascii_dim_;
+    const uint16_t offset = (ch >= 192)
+            ? (ch - 192) * (rus_dim_.w * 2 + 1)
+            : (ch - 32)  * (ascii_dim_.w * 2 + 1);  // two bytes for char. 2 is magic for all!
+                                                    // but should be bytes of height
+                                                    // mod 8. TODO: update for another fonts sizes
+    auto data_ptr = base_ptr + offset;
+    uint8_t width = data_ptr[0];
+    auto height_align = (ch >= 192) ? 0 : rus_dim_.h - ascii_dim_.h;
+    for (uint8_t j = 0; j < width; j++) {
+        for(uint8_t i = 0; i < dim.h; i++) {
+            auto data = data_ptr[j*2 + i / 8 + 1];
+            if (data & 1 << (i % 8)) painter.drawPoint({j, (CoordType)(i + height_align)}); // kind of magic
         }
     }
-    return (CoordType)8;
-};
+    return width + GAP;
 
-CoordType
-MonotypeMidFont::paintChar(const char& ch, PainterInterface& painter) const {
-    const size_t offset = ch * 16;
-    for(uint8_t row = 0; row < 16; ++row) {
-        auto data = MONOTYPE_MID[offset + row];
-        for (uint8_t col = 0; col < 16; ++col) {
-            if (data & 1 << (15 - col)) painter.drawPoint({col, row});
-        }
-    }
-    return (CoordType)16;
-};
+}
 
-std::shared_ptr<FontInterface> buildFontByType(FontType type) {
+VerdanaMidFont::VerdanaMidFont()
+    :AbstractFont(VERDANA_ASCII_MID, VERDANA_RUS_MID, {12, 13}, {13,16}) {};
+
+VerdanaMidBoldFont::VerdanaMidBoldFont()
+    :AbstractFont(VERDANA_ASCII_MID_BOLD, VERDANA_RUS_MID_BOLD, {16, 14}, {14,15}) {};
+
+
+std::shared_ptr<AbstractFont> buildFontByType(FontType type) {
     switch (type) {
-    case MONOTYPE_MID_FONT:
-        return std::make_shared<MonotypeMidFont>();
+    case VERDANA_MID_BOLD:
+        return std::make_shared<VerdanaMidBoldFont>();
+    case VERDANA_MID:
     default:
-        return std::make_shared<MonotypeTinyFont>();
+        return std::make_shared<VerdanaMidFont>();
     }
 }
 
@@ -44,7 +59,7 @@ Label::Label(std::string text, FontType type): text_(text) {
 void
 Label::paint(PainterInterface& painter) const {
     CoordType offset = 0;
-    for(const char& ch : text_) {
+    for(const unsigned char& ch : text_) {
         MovedPainter p(painter, offset, 0);
         offset += font_->paintChar(ch, p);
     }

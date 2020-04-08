@@ -38,8 +38,7 @@ HEADERS += \
     ../mcu_gui/app/gauges/segment_indicator.h \
     ../mcu_gui/core/color32.h \
     ../mcu_gui/core/font/font.h \
-    ../mcu_gui/core/font/monotype_16x16.h \
-    ../mcu_gui/core/font/monotype_8x8.h \
+    ../mcu_gui/core/font/verdana.h \
     ../mcu_gui/core/layout.h \
     ../mcu_gui/core/linear/matrix.h \
     ../mcu_gui/core/paint_engine.h \
