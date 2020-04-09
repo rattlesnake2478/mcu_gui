@@ -3,7 +3,7 @@
 #include <QPainter>
 #include <QTimer>
 
-#include "../mcu_gui/core/font/font.h"
+#include "../mcu_gui/app/components/label.h"
 
 using namespace McuGui;
 
@@ -25,7 +25,7 @@ MainWindow::MainWindow(uint16_t width, uint16_t height)
 
     TransformedPainter painter2(painter, TransformMatrix::rotate(0) * TransformMatrix::move(50, 50));
 
-    Label lbl("Test message! Hello, World!", FontType::VERDANA_MID_BOLD);
+    Label lbl("Test message! Hello, World! Русский текст", FontType::VERDANA_MID_BOLD);
     lbl.paint(painter2);
 
 }
