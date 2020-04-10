@@ -2,6 +2,8 @@
 
 using namespace McuGui;
 
+const Dimension Lamp::StandartDimension = {40, 40};
+
 void
 Lamp::paint(PainterInterface& painter) const {
     // Draw lamp base

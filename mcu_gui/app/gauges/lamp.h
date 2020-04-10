@@ -14,7 +14,7 @@ public:
        SQARE = 1,
     };
 
-    const Dimension StandartDimension = {40, 40};
+    static const Dimension StandartDimension;
 
     Lamp(const Mask& glyph,
          Type type = Type::SQARE,

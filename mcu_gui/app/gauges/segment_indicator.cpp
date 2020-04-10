@@ -19,7 +19,7 @@ SegmentIndicator::drawSegment(PainterInterface& painter, SegmentType segment) co
     Position segment_pos;
     const DigitSegment *segment_ptr;
     const auto dim = DigitSegment::getSize(size_);
-    const CoordType gap = dim.w / 2 - 2;
+    const CoordType gap = dim.w / 3 - 2;
 
     switch (segment) {
     case A:

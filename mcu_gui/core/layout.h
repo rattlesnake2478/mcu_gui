@@ -7,7 +7,7 @@ namespace McuGui {
 
 class GridLayout: public WidgetContainer {
 public:
-    GridLayout(Dimension cell_size, uint8_t rows = 4, uint8_t cols = 4, CoordType margin = 10):
+    GridLayout(Dimension cell_size, uint8_t rows = 4, uint8_t cols = 4, Dimension margin = {10, 10}):
         cell_size_(cell_size),
         rows_(rows),
         cols_(cols),
@@ -27,13 +27,13 @@ protected:
     Dimension cell_size_;
     uint8_t rows_;
     uint8_t cols_;
-    CoordType margin_;
+    Dimension margin_;
 };
 
 class HLayout: public GridLayout {
 public:
-    HLayout(Dimension cell_size, uint8_t cols = 4, CoordType margin = 10):
-        GridLayout(cell_size, 1, cols, margin)
+    HLayout(Dimension cell_size, uint8_t cols = 4, SizeType margin = 10):
+        GridLayout(cell_size, 1, cols, {margin, 0})
     {};
 
     bool addWidget(AbstractWidget* w, uint8_t col) {
@@ -43,8 +43,8 @@ public:
 
 class VLayout: public GridLayout {
 public:
-    VLayout(Dimension cell_size, uint8_t rows = 4, CoordType margin = 10):
-        GridLayout(cell_size, rows, 1, margin)
+    VLayout(Dimension cell_size, uint8_t rows = 4, SizeType margin = 10):
+        GridLayout(cell_size, rows, 1, {margin, 0})
     {};
 
     bool addWidget(AbstractWidget* w, uint8_t row) {
