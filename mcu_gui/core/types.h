@@ -1,7 +1,7 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#include <inttypes.h>
+#include "color32.h"
 #include <vector>
 
 namespace McuGui {
@@ -45,6 +45,11 @@ struct Mask {
     std::vector<uint32_t> data;
 
     Mask(uint16_t w, uint16_t h, std::vector<uint32_t> v):width(w), height(h), data(v) {};
+};
+
+struct Bitmap {
+    Color* data;
+    Dimension size;
 };
 
 const Dimension DISPLAY_480_272 = {480, 272};

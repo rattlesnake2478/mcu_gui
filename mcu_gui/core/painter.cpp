@@ -83,6 +83,12 @@ SimplePainter::drawTriangle(Position v1, Position v2, Position v3) const {
 }
 
 void
+SimplePainter::
+drawBitmap(Position pos, Bitmap bitmap) const {
+    engine_.copyBitmap(pos.x, pos.y, bitmap);
+};
+
+void
 PainterDecorator::drawPoint(Position pos) const {
     base_.drawPoint(convertPosition(pos));
 }
@@ -113,6 +119,12 @@ PainterDecorator::drawMask(const Mask& mask) const {
             if (chunk >- mask.data.size()) return;
         }
     }
+}
+
+void
+PainterDecorator::drawBitmap(Position pos, Bitmap bitmap) const {
+    auto new_pos = convertPosition(pos);
+    base_.drawBitmap(new_pos, bitmap);
 }
 
 Position
@@ -158,3 +170,11 @@ TransformedPainter::drawMask(const Mask& mask) const {
         }
     }
 }
+
+void
+TransformedPainter::
+drawBitmap(Position pos, Bitmap bitmap) const {
+    auto vertexMatrix = FloatMatrix::fromVertexes({pos});
+    auto result = (vertexMatrix * transform_).toVertexes();
+    base_.drawBitmap(result[0], bitmap);
+};

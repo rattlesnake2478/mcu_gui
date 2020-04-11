@@ -16,6 +16,7 @@ public:
     virtual void drawLine(Position start, Position end) const = 0;
     virtual void drawTriangle(Position v1, Position v2, Position v3) const = 0;
     virtual void drawMask(const Mask& mask) const = 0;
+    virtual void drawBitmap(Position pos, Bitmap bitmap) const = 0;
 };
 
 class SimplePainter: public PainterInterface {
@@ -28,6 +29,7 @@ public:
     virtual void drawLine(Position start, Position end) const override;
     virtual void drawTriangle(Position v1, Position v2, Position v3) const override;
     virtual void drawMask(const Mask& mask) const override;
+    virtual void drawBitmap(Position pos, Bitmap bitmap) const override;
 
 protected:
     const PaintEngineInterface& engine_;
@@ -46,6 +48,7 @@ public:
     virtual void drawLine(Position start, Position end) const override;
     virtual void drawTriangle(Position v1, Position v2, Position v3) const override;
     virtual void drawMask(const Mask& mask) const override;
+    virtual void drawBitmap(Position pos, Bitmap bitmap) const override;
 
 protected:
     virtual Position convertPosition(Position pos) const = 0;
@@ -77,6 +80,7 @@ public:
     virtual void drawLine(Position start, Position end) const override;
     virtual void drawTriangle(Position v1, Position v2, Position v3) const override;
     virtual void drawMask(const Mask& mask) const override;
+    virtual void drawBitmap(Position pos, Bitmap bitmap) const override;
 
 protected:
     PainterInterface& base_;
