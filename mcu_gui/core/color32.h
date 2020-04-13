@@ -33,10 +33,12 @@ const Color COLOR_LIGHT_GREY = 0xFFD3D3D3;
 const Color COLOR_GREY = 0xFF808080;
 const Color COLOR_DARK_GREY = 0xFF404040;
 const Color COLOR_BLACK = 0xFF000000;
-const Color COLOR_TRANSPARENT = 0x00000000;
+const Color COLOR_TRANSPARENT = 0x00FFFFFF;
 
 const Color COLOR_BROWN = 0xFFA52A2A;
 const Color COLOR_ORANGE = 0xFFFFA500;
+
+bool isTransparent(Color c);
 
 } // end namespace McuGui
 
