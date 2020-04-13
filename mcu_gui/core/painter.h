@@ -59,7 +59,7 @@ class MovedPainter: public PainterDecorator {
 public:
     MovedPainter(PainterInterface& base, CoordType dx, CoordType dy)
         : PainterDecorator(base), dx_(dx), dy_(dy) {}
-
+    void move(CoordType dx, CoordType dy) {dx_ += dx; dy_ += dy; }
 protected:
     Position convertPosition(Position pos) const;
     CoordType dx_, dy_;

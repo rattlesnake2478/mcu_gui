@@ -24,6 +24,7 @@ class FontDataWriter {
 public:
     FontDataWriter(const uint8_t* const data_ptr, Dimension size, int8_t align = 0);
     CoordType paintChar(uint8_t offset, PainterInterface& painter) const;
+    Dimension getCharSize(uint8_t offset) const;
 protected:
     const uint8_t* const data_ptr_;
     const Dimension size_;
@@ -34,6 +35,7 @@ protected:
 class AbstractFontRenderer {
 public:
     CoordType renderChar(uint8_t ch, PainterInterface& painter) const;
+    Dimension getCharSize(uint8_t ch) const;
     static std::unique_ptr<AbstractFontRenderer> getFontByType(FontType);
 protected:
     typedef std::tuple<uint8_t, uint8_t, FontDataWriter> RangeFontWriter;

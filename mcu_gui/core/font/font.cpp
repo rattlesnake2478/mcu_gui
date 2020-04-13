@@ -22,6 +22,13 @@ FontDataWriter::paintChar(uint8_t offset, PainterInterface& painter) const {
     return char_width;
 }
 
+Dimension
+FontDataWriter::getCharSize(uint8_t offset) const {
+    auto ptr = data_ptr_ + offset * (size_.w * column_size_ + 1);
+    auto char_width = *ptr;
+    return {char_width, size_.h};
+}
+
 void
 AbstractFontRenderer::addRangeFontWriter(uint8_t start, uint8_t end, FontDataWriter writer) {
     range_font_writers_.push_back(std::make_tuple(start, end, writer));
@@ -36,6 +43,17 @@ AbstractFontRenderer::renderChar(uint8_t ch, PainterInterface& painter) const {
     }
     return 0;
 }
+
+Dimension
+AbstractFontRenderer::
+getCharSize(uint8_t ch) const {
+    for(auto writer: range_font_writers_) {
+        if (ch >= std::get<0>(writer) && ch <= std::get<1>(writer)) {
+            return std::get<2>(writer).getCharSize(ch - std::get<0>(writer));
+        }
+    }
+    return {0,0};
+};
 
 std::unique_ptr<AbstractFontRenderer>
 AbstractFontRenderer::getFontByType(FontType type) {
