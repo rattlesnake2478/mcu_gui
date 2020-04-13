@@ -18,12 +18,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     ../mcu_gui/app/components/digit_segment.cpp \
     ../mcu_gui/app/components/label.cpp \
+    ../mcu_gui/app/gauges/arrow_indicator.cpp \
     ../mcu_gui/app/gauges/gauge.cpp \
     ../mcu_gui/app/gauges/lamp.cpp \
     ../mcu_gui/app/gauges/segment_indicator.cpp \
+    ../mcu_gui/core/color32.cpp \
     ../mcu_gui/core/font/font.cpp \
     ../mcu_gui/core/font/verdana/verdana_mid.cpp \
-    ../mcu_gui/core/font/verdana/verdana_mid_bold.cpp \
+    ../mcu_gui/core/font/verdana/verdana_number_20.cpp \
     ../mcu_gui/core/layout.cpp \
     ../mcu_gui/core/linear/matrix.cpp \
     ../mcu_gui/core/paint_engine.cpp \
@@ -37,15 +39,16 @@ HEADERS += \
     ../mcu_gui/app/components/digit_segment.h \
     ../mcu_gui/app/components/label.h \
     ../mcu_gui/app/components/lamps.h \
+    ../mcu_gui/app/gauges/arrow_indicator.h \
     ../mcu_gui/app/gauges/gauge.h \
     ../mcu_gui/app/gauges/lamp.h \
     ../mcu_gui/app/gauges/segment_indicator.h \
     ../mcu_gui/core/color32.h \
     ../mcu_gui/core/font/font.h \
     ../mcu_gui/core/font/verdana/verdana_mid.h \
-    ../mcu_gui/core/font/verdana/verdana_mid_bold.h \
-    ../mcu_gui/core/font/verdana/verdana_mid_bold_data.h \
     ../mcu_gui/core/font/verdana/verdana_mid_data.h \
+    ../mcu_gui/core/font/verdana/verdana_number_20.h \
+    ../mcu_gui/core/font/verdana/verdana_number_20_data.h \
     ../mcu_gui/core/layout.h \
     ../mcu_gui/core/linear/matrix.h \
     ../mcu_gui/core/paint_engine.h \
@@ -58,3 +61,6 @@ HEADERS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    resources.qrc
