@@ -1,6 +1,6 @@
 #include "font.h"
 #include "verdana/verdana_mid.h"
-#include "verdana/verdana_mid_bold.h"
+#include "verdana/verdana_number_20.h"
 
 using namespace McuGui;
 
@@ -15,7 +15,7 @@ FontDataWriter::paintChar(uint8_t offset, PainterInterface& painter) const {
     auto char_width = *ptr;
     for (uint8_t j = 0; j < char_width; j++) {
         for(uint8_t i = 0; i < size_.h; i++) {
-            auto data = ptr[j*2 + i / 8 + 1];
+            auto data = ptr[j*column_size_ + i / 8 + 1];
             if (data & 1 << (i % 8)) painter.drawPoint({j, (CoordType)(i + align_)});
         }
     }
@@ -40,8 +40,8 @@ AbstractFontRenderer::renderChar(uint8_t ch, PainterInterface& painter) const {
 std::unique_ptr<AbstractFontRenderer>
 AbstractFontRenderer::getFontByType(FontType type) {
     switch (type) {
-    case VERDANA_MID_BOLD:
-        return std::make_unique<VerdanaMidBoldFont>();
+    case VERDANA_NUMBER_20:
+        return std::make_unique<VerdanaNumber20Font>();
     case VERDANA_MID:
     default:
         return std::make_unique<VerdanaMidFont>();

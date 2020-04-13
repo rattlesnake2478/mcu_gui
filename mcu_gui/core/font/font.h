@@ -9,13 +9,15 @@ namespace McuGui {
 
 enum FontType {
     VERDANA_MID = 0,
-    VERDANA_MID_BOLD,
+    VERDANA_NUMBER_20,
 };
 
 const uint8_t ASCII_FONT_START = 32;
 const uint8_t ASCII_FONT_END = 127;
 const uint8_t RUS_FONT_START = 192;
 const uint8_t RUS_FONT_END = 255;
+const uint8_t NUMBER_FONT_START = 45;
+const uint8_t NUMBER_FONT_END = 57;
 
 // TODO: think about linking. If we dont use the font - it should not be linked
 class FontDataWriter {
