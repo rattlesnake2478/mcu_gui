@@ -8,6 +8,7 @@
 #include "../mcu_gui/core/layout.h"
 #include "../mcu_gui/app/gauges/lamp.h"
 #include "../mcu_gui/app/gauges/arrow_indicator.h"
+#include "../mcu_gui/app/gauges/tachometer.h"
 
 using namespace McuGui;
 
@@ -27,7 +28,6 @@ MainWindow::MainWindow(uint16_t width, uint16_t height)
 
     MemoryPaintEngine engine(buffer_);
     SimplePainter painter(engine);
-
     drawDash(painter);
 }
 
@@ -76,6 +76,14 @@ MainWindow::drawDash(PainterInterface& painter) {
     auto imagePtr2 = (Color*)image2.bits();
     Bitmap bitmap2{imagePtr2, {85, 75}};
 
+    QImage image3(":/png/typ1.png");
+    auto imagePtr3 = (Color*)image3.bits();
+    Bitmap bitmap4{imagePtr3, {460, 220}};
+    TachometerTyp1 tach(bitmap4);
+    tach.setValue(10000);
+    MovedPainter bpnt(painter, 8, 45);
+    tach.paint(bpnt);
+
     MovedPainter pnt4(painter, 120, 185);
     auto temp = ArrowIndicator::buildArrowA(bitmap1, 60, 130, false);
     temp.setValue(90);
@@ -106,4 +114,5 @@ void MainWindow::paintEvent(QPaintEvent *)
     }
     QPainter painter(this);
     painter.drawImage(0,0,*mainImage_);
+    mainImage_->save("./image.png");
 }

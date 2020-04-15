@@ -39,6 +39,7 @@ const Color COLOR_BROWN = 0xFFA52A2A;
 const Color COLOR_ORANGE = 0xFFFFA500;
 
 bool isTransparent(Color c);
+Color mix(Color src, Color dst);
 
 } // end namespace McuGui
 

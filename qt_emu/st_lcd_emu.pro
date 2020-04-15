@@ -22,6 +22,7 @@ SOURCES += \
     ../mcu_gui/app/gauges/gauge.cpp \
     ../mcu_gui/app/gauges/lamp.cpp \
     ../mcu_gui/app/gauges/segment_indicator.cpp \
+    ../mcu_gui/app/gauges/tachometer.cpp \
     ../mcu_gui/core/color32.cpp \
     ../mcu_gui/core/font/font.cpp \
     ../mcu_gui/core/font/verdana/verdana_mid.cpp \
@@ -43,6 +44,7 @@ HEADERS += \
     ../mcu_gui/app/gauges/gauge.h \
     ../mcu_gui/app/gauges/lamp.h \
     ../mcu_gui/app/gauges/segment_indicator.h \
+    ../mcu_gui/app/gauges/tachometer.h \
     ../mcu_gui/core/color32.h \
     ../mcu_gui/core/font/font.h \
     ../mcu_gui/core/font/verdana/verdana_mid.h \

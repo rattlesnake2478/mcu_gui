@@ -18,8 +18,9 @@ MemoryPaintEngine::copyBitmap(CoordType x, CoordType y, Bitmap b) const {
 
     for (SizeType row = 0; row < row_max; ++row) {
         for (SizeType col = 0; col < col_max; ++col) {
-            if (isTransparent(b.data[col + row * b.size.w])) {
-                *it = b.data[col + row * b.size.w];
+            size_t addr = col + row * b.size.w;
+            if (!isTransparent(b.data[addr])) {
+                *it = mix(b.data[addr], *it);
             }
             ++it;
         }

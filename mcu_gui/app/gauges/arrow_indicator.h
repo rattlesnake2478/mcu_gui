@@ -7,6 +7,10 @@
 namespace McuGui {
 
 // Complex class to tune. Use predefined static methods instead
+// TODO: split class to separate parts
+//      1. Arrow widget
+//      2. Label widget
+//      3. Something other
 class ArrowIndicator: public AbstractWidget {
 public:
     ArrowIndicator(Bitmap bgrnd,
