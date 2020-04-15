@@ -9,6 +9,7 @@
 #include "../mcu_gui/app/gauges/lamp.h"
 #include "../mcu_gui/app/gauges/arrow_indicator.h"
 #include "../mcu_gui/app/gauges/tachometer.h"
+#include "../mcu_gui/app/widgets/time_widget.h"
 
 using namespace McuGui;
 
@@ -28,6 +29,7 @@ MainWindow::MainWindow(uint16_t width, uint16_t height)
 
     MemoryPaintEngine engine(buffer_);
     SimplePainter painter(engine);
+
     drawDash(painter);
 }
 
@@ -93,6 +95,11 @@ MainWindow::drawDash(PainterInterface& painter) {
     pnt4.move(0, -90);
     bat.setValue(15.1);
     bat.paint(pnt4);
+
+    MovedPainter pnt5(painter, 170, 0);
+    TimeWidget time;
+    time.setTime(23, 20);
+    time.paint(pnt5);
 
 }
 
