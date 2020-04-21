@@ -18,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     ../mcu_gui/app/components/digit_segment.cpp \
     ../mcu_gui/app/components/label.cpp \
+    ../mcu_gui/app/dashboard/dashboard_typ1.cpp \
     ../mcu_gui/app/gauges/arrow_indicator.cpp \
     ../mcu_gui/app/gauges/gauge.cpp \
     ../mcu_gui/app/gauges/lamp.cpp \
@@ -41,6 +42,7 @@ HEADERS += \
     ../mcu_gui/app/components/digit_segment.h \
     ../mcu_gui/app/components/label.h \
     ../mcu_gui/app/components/lamps.h \
+    ../mcu_gui/app/dashboard/dashboard_typ1.h \
     ../mcu_gui/app/gauges/arrow_indicator.h \
     ../mcu_gui/app/gauges/gauge.h \
     ../mcu_gui/app/gauges/lamp.h \

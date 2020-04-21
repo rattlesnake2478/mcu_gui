@@ -3,13 +3,7 @@
 #include <QPainter>
 #include <QTimer>
 
-#include "../mcu_gui/app/components/label.h"
-#include "../mcu_gui/app/gauges/segment_indicator.h"
-#include "../mcu_gui/core/layout.h"
-#include "../mcu_gui/app/gauges/lamp.h"
-#include "../mcu_gui/app/gauges/arrow_indicator.h"
-#include "../mcu_gui/app/gauges/tachometer.h"
-#include "../mcu_gui/app/widgets/time_widget.h"
+#include "../mcu_gui/app/dashboard/dashboard_typ1.h"
 
 using namespace McuGui;
 
@@ -30,77 +24,31 @@ MainWindow::MainWindow(uint16_t width, uint16_t height)
     MemoryPaintEngine engine(buffer_);
     SimplePainter painter(engine);
 
-    drawDash(painter);
-}
-
-void
-MainWindow::drawDash(PainterInterface& painter) {
-    MovedPainter pnt(painter, 470, 260);
-    MultiSegmentIndicator ind(DigitSegment::Huge, COLOR_BLUE, COLOR_WHITE);
-
-    ind.setValue(128);
-    ind.paint(pnt);
-
-    LeftTurnLamp ltl;
-    RightTurnLamp rtl;
-    NeutralLamp nl;
-    HighBeamLamp hbl;
-    BatteryLamp bl;
-    TempLamp tl;
-
-    ltl.setValue(true);
-    rtl.setValue(true);
-    nl.setValue(true);
-    hbl.setValue(true);
-    bl.setValue(true);
-    tl.setValue(true);
-
-    MovedPainter pnt2(painter, -5, 0);
-    MovedPainter pnt3(painter, 334, 0);
-
-    HLayout llayout(Lamp::StandartDimension, 3, 5);
-    HLayout rlayout(Lamp::StandartDimension, 3, 5);
-    llayout.addWidget(&ltl, 0);
-    llayout.addWidget(&nl, 1);
-    llayout.addWidget(&bl, 2);
-    rlayout.addWidget(&tl, 0);
-    rlayout.addWidget(&hbl, 1);
-    rlayout.addWidget(&rtl, 2);
-
-    llayout.paint(pnt2);
-    rlayout.paint(pnt3);
-
     QImage image1(":/png/battery_scale.png");
     auto imagePtr1 = (Color*)image1.bits();
-    Bitmap bitmap1{imagePtr1, {85, 75}};
+    Bitmap volt{imagePtr1, {85, 75}};
 
     QImage image2(":/png/temp_scale.png");
     auto imagePtr2 = (Color*)image2.bits();
-    Bitmap bitmap2{imagePtr2, {85, 75}};
+    Bitmap temp{imagePtr2, {85, 75}};
 
     QImage image3(":/png/typ1.png");
     auto imagePtr3 = (Color*)image3.bits();
-    Bitmap bitmap4{imagePtr3, {460, 220}};
-    TachometerTyp1 tach(bitmap4);
-    tach.setValue(10000);
-    MovedPainter bpnt(painter, 8, 45);
-    tach.paint(bpnt);
+    Bitmap tach{imagePtr3, {460, 220}};
 
-    MovedPainter pnt4(painter, 120, 185);
-    auto temp = ArrowIndicator::buildArrowA(bitmap1, 60, 130, false);
-    temp.setValue(90);
-    temp.paint(pnt4);
+    DashboardType1::Data data;
+    data.tach = 10000;
+    data.hrs=23;
+    data.min=30;
+    data.temp=120;
+    data.voltage=14.5;
+    data.speed=89;
 
-    auto bat = ArrowIndicator::buildArrowA(bitmap2, 10, 18, true);
-    pnt4.move(0, -90);
-    bat.setValue(15.1);
-    bat.paint(pnt4);
+    data.lamps.ltl = true;
 
-    MovedPainter pnt5(painter, 170, 0);
-    TimeWidget time;
-    time.setTime(23, 20);
-    time.paint(pnt5);
-
+    DashboardType1 dash(tach, temp, volt);
+    dash.setData(data);
+    dash.paint(painter);
 }
 
 MainWindow::~MainWindow()

@@ -8,11 +8,13 @@ using namespace McuGui;
 
 void
 SimplePainter::drawPoint(Position pos) const {
+    if(isTransparent(pen_)) return; // no actions to reduce cpu load
     engine_.plot(pos.x, pos.y, pen_);
 }
 
 void
 SimplePainter::drawMask(const Mask& mask) const {
+    if(isTransparent(pen_)) return; // no actions to reduce cpu load
     uint8_t shift = 0;
     uint8_t chunk = 0;
     for (uint16_t i = 0; i < mask.width; ++i) {
@@ -30,6 +32,7 @@ SimplePainter::drawMask(const Mask& mask) const {
 
 void
 SimplePainter::drawLine(Position start, Position end) const {
+    if(isTransparent(pen_)) return; // no actions to reduce cpu load
     bool steep = false;
     if (std::abs(start.x-end.x) < std::abs(start.y-end.y)) {
         std::swap(start.x, start.y);
@@ -62,6 +65,7 @@ SimplePainter::drawLine(Position start, Position end) const {
 
 void
 SimplePainter::drawTriangle(Position v1, Position v2, Position v3) const {
+    if(isTransparent(pen_)) return; // no actions to reduce cpu load
     if (v1.y==v2.y && v1.y==v3.y) return;
     if (v1.y>v2.y) std::swap(v1, v2);
     if (v1.y>v3.y) std::swap(v1, v3);

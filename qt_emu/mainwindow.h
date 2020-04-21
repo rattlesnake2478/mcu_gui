@@ -15,7 +15,6 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *);
-    void drawDash(McuGui::PainterInterface& painter);
 
 private:
     uint16_t height_, width_;
