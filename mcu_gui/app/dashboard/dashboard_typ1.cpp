@@ -1,5 +1,4 @@
 #include "dashboard_typ1.h"
-#include "../../core/layout.h"
 
 using namespace McuGui;
 
@@ -14,29 +13,28 @@ DashboardType1::DashboardType1(Bitmap tach, Bitmap volt, Bitmap temp):
     temp_(ArrowIndicator::buildArrowA(temp, 60, 130, false)),
     volt_(ArrowIndicator::buildArrowA(volt, 10, 18, true)),
     time_(),
-    tach_(tach)
+    tach_(tach),
+    l_lamps_(Lamp::StandartDimension, 3, 5),
+    r_lamps_(Lamp::StandartDimension, 3, 5)
 {
-
+    l_lamps_.addWidget(&ltl_, 0);
+    l_lamps_.addWidget(&nl_, 1);
+    l_lamps_.addWidget(&bl_, 2);
+    r_lamps_.addWidget(&tl_, 0);
+    r_lamps_.addWidget(&hbl_, 1);
+    r_lamps_.addWidget(&rtl_, 2);
 }
 
 void
 DashboardType1::paint(PainterInterface &painter) const {
     MovedPainter pnt(painter, 0, 0);
     // draw lamps and time - upper line
-    HLayout llayout(Lamp::StandartDimension, 3, 5);
-    HLayout rlayout(Lamp::StandartDimension, 3, 5);
-    llayout.addWidget(&ltl_, 0);
-    llayout.addWidget(&nl_, 1);
-    llayout.addWidget(&bl_, 2);
-    rlayout.addWidget(&tl_, 0);
-    rlayout.addWidget(&hbl_, 1);
-    rlayout.addWidget(&rtl_, 2);
     pnt.move(-5, 0);
-    llayout.paint(pnt);
+    l_lamps_.paint(pnt);
     pnt.move(175, 0);
     time_.paint(pnt);
     pnt.move(164, 0);
-    rlayout.paint(pnt);
+    r_lamps_.paint(pnt);
 
     // draw speedometer
     pnt.move(131, 260);

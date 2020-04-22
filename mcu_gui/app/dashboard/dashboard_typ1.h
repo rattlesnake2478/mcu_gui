@@ -1,6 +1,7 @@
 #ifndef DASHBOARD_TYP1_H
 #define DASHBOARD_TYP1_H
 
+#include "../../core/layout.h"
 #include "../../core/widget.h"
 #include "../gauges/arrow_indicator.h"
 #include "../gauges/lamp.h"
@@ -43,6 +44,8 @@ private:
     ArrowIndicator volt_;
     TimeWidget time_;
     TachometerTyp1 tach_;
+    HLayout l_lamps_;
+    HLayout r_lamps_;
 };
 
 } // end namespace McuGui

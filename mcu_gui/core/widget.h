@@ -19,10 +19,10 @@ public:
 protected:
     struct Element {
         Position pos;
-        const AbstractWidget* element;
+        AbstractWidget* element;
     };
 
-    void addElement(const AbstractWidget* el, Position pos) {
+    void addElement(AbstractWidget* el, Position pos) {
         elements_.push_back({pos, el});
     };
 private:

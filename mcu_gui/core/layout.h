@@ -14,7 +14,7 @@ public:
         margin_(margin)
     {};
 
-    bool addWidget(const AbstractWidget* w, uint8_t row, uint8_t col) {
+    bool addWidget(AbstractWidget* w, uint8_t row, uint8_t col) {
         if (row >= rows_) return false;
         if (col >= cols_) return false;
         Position pos = getPosition(row, col);
@@ -36,7 +36,7 @@ public:
         GridLayout(cell_size, 1, cols, {margin, 0})
     {};
 
-    bool addWidget(const AbstractWidget* w, uint8_t col) {
+    bool addWidget(AbstractWidget* w, uint8_t col) {
         return GridLayout::addWidget(w, 0, col);
     }
 };
@@ -47,7 +47,7 @@ public:
         GridLayout(cell_size, rows, 1, {margin, 0})
     {};
 
-    bool addWidget(const AbstractWidget* w, uint8_t row) {
+    bool addWidget(AbstractWidget* w, uint8_t row) {
         return GridLayout::addWidget(w, row, 0);
     }
 };
