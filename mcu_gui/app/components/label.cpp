@@ -7,10 +7,10 @@ NumberLabel::NumberLabel(float val, FontType type, TextAlign align, bool float_m
 
 std::string
 NumberLabel::getStringData() const {
-    std::string result = std::to_string(val_);
-    auto pos = result.find('.');
-    if (float_mode_) {
-        return result.substr(0, pos + 3);
-    }
-    return result.substr(0, pos);
+	uint32_t int_part = (uint32_t)val_;
+	if (!float_mode_) {
+		return std::to_string(int_part);
+	}
+	uint32_t float_part = (uint32_t)((val_ - int_part) * 100);
+    return std::to_string(int_part) + std::string(".") + std::to_string(float_part);
 };
