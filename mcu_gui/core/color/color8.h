@@ -33,7 +33,7 @@ const Color COLOR_LIGHT_GREY = 43;
 const Color COLOR_GREY = 129;
 const Color COLOR_DARK_GREY = 172;
 const Color COLOR_BLACK = 255;
-const Color COLOR_TRANSPARENT = 255;
+const Color COLOR_TRANSPARENT = 245;
 
 const Color COLOR_BROWN = 100;
 const Color COLOR_ORANGE = 17;

@@ -5,8 +5,8 @@ const uint32_t* McuGui::getColorTable() {
     return macOsPalette;
 }
 
-bool McuGui::isTransparent(Color) {
-   return false; // 8 bit color has no transparency
+bool McuGui::isTransparent(Color c) {
+   return c == COLOR_TRANSPARENT;
 }
 
 McuGui::Color McuGui::mix(McuGui::Color src, McuGui::Color) {

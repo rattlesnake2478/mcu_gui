@@ -1,10 +1,10 @@
 <RCC>
-    <qresource prefix="/bmp">
-        <file>accum.bmp</file>
-    </qresource>
     <qresource prefix="/png">
         <file>battery_scale.png</file>
         <file>temp_scale.png</file>
         <file>typ1.png</file>
+        <file>battery_scale_8.png</file>
+        <file>temp_scale_8.png</file>
+        <file>typ1_8.png</file>
     </qresource>
 </RCC>
