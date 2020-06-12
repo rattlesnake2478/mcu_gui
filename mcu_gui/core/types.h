@@ -1,7 +1,9 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-#include "color32.h"
+//#include "color/color32.h"
+#include "color/color8.h"
+
 #include <vector>
 
 namespace McuGui {
