@@ -1,7 +1,7 @@
 #ifndef ARROW_GAUGE_H
 #define ARROW_GAUGE_H
 
-#include "../../core/widget.h"
+#include "../core/widget.h"
 #include "../components/label.h"
 
 namespace McuGui {

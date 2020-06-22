@@ -1,12 +1,12 @@
 #ifndef DASHBOARD_TYP1_H
 #define DASHBOARD_TYP1_H
 
-#include "../../core/layout.h"
-#include "../../core/widget.h"
+#include "../core/layout.h"
+#include "../core/widget.h"
 #include "../gauges/arrow_indicator.h"
 #include "../gauges/lamp.h"
 #include "../gauges/tachometer.h"
-#include "../widgets/time_widget.h"
+#include "../components/time_widget.h"
 
 namespace McuGui {
 

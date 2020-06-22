@@ -1,7 +1,7 @@
 #ifndef DIGITSEGMENT_H
 #define DIGITSEGMENT_H
 
-#include "../../core/widget.h"
+#include "../core/widget.h"
 
 namespace McuGui {
 

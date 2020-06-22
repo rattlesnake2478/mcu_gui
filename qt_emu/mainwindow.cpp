@@ -3,7 +3,7 @@
 #include <QPainter>
 #include <QTimer>
 
-#include "../mcu_gui/app/dashboard/dashboard_typ1.h"
+#include "../mcu_gui/dashboard/dashboard_typ1.h"
 
 using namespace McuGui;
 

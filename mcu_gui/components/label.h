@@ -1,8 +1,8 @@
 #ifndef LABEL_H
 #define LABEL_H
 
-#include "../../core/widget.h"
-#include "../../core/font/font.h"
+#include "../core/widget.h"
+#include "../core/font/font.h"
 
 namespace McuGui {
 

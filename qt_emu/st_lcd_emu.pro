@@ -16,15 +16,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    ../mcu_gui/app/components/digit_segment.cpp \
-    ../mcu_gui/app/components/label.cpp \
-    ../mcu_gui/app/dashboard/dashboard_typ1.cpp \
-    ../mcu_gui/app/gauges/arrow_indicator.cpp \
-    ../mcu_gui/app/gauges/gauge.cpp \
-    ../mcu_gui/app/gauges/lamp.cpp \
-    ../mcu_gui/app/gauges/segment_indicator.cpp \
-    ../mcu_gui/app/gauges/tachometer.cpp \
-    ../mcu_gui/app/widgets/time_widget.cpp \
+    ../mcu_gui/components/digit_segment.cpp \
+    ../mcu_gui/components/label.cpp \
+    ../mcu_gui/components/time_widget.cpp \
     ../mcu_gui/core/color/color32.cpp \
     ../mcu_gui/core/color/color8.cpp \
     ../mcu_gui/core/font/font.cpp \
@@ -35,21 +29,21 @@ SOURCES += \
     ../mcu_gui/core/paint_engine.cpp \
     ../mcu_gui/core/painter.cpp \
     ../mcu_gui/core/widget.cpp \
+    ../mcu_gui/dashboard/dashboard_typ1.cpp \
+    ../mcu_gui/gauges/arrow_indicator.cpp \
+    ../mcu_gui/gauges/gauge.cpp \
+    ../mcu_gui/gauges/lamp.cpp \
+    ../mcu_gui/gauges/segment_indicator.cpp \
+    ../mcu_gui/gauges/tachometer.cpp \
     main.cpp \
     mainwindow.cpp
 
 
 HEADERS += \
-    ../mcu_gui/app/components/digit_segment.h \
-    ../mcu_gui/app/components/label.h \
-    ../mcu_gui/app/components/lamps.h \
-    ../mcu_gui/app/dashboard/dashboard_typ1.h \
-    ../mcu_gui/app/gauges/arrow_indicator.h \
-    ../mcu_gui/app/gauges/gauge.h \
-    ../mcu_gui/app/gauges/lamp.h \
-    ../mcu_gui/app/gauges/segment_indicator.h \
-    ../mcu_gui/app/gauges/tachometer.h \
-    ../mcu_gui/app/widgets/time_widget.h \
+    ../mcu_gui/components/digit_segment.h \
+    ../mcu_gui/components/label.h \
+    ../mcu_gui/components/lamps.h \
+    ../mcu_gui/components/time_widget.h \
     ../mcu_gui/core/color/color32.h \
     ../mcu_gui/core/color/color8.h \
     ../mcu_gui/core/color/mac_os_palette.h \
@@ -64,6 +58,13 @@ HEADERS += \
     ../mcu_gui/core/painter.h \
     ../mcu_gui/core/types.h \
     ../mcu_gui/core/widget.h \
+    ../mcu_gui/dashboard/abstract_dashboard.h \
+    ../mcu_gui/dashboard/dashboard_typ1.h \
+    ../mcu_gui/gauges/arrow_indicator.h \
+    ../mcu_gui/gauges/gauge.h \
+    ../mcu_gui/gauges/lamp.h \
+    ../mcu_gui/gauges/segment_indicator.h \
+    ../mcu_gui/gauges/tachometer.h \
     mainwindow.h
 
 # Default rules for deployment.

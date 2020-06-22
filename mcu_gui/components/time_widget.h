@@ -1,7 +1,7 @@
 #ifndef TIME_WIDGET_H
 #define TIME_WIDGET_H
 
-#include "../../core/widget.h"
+#include "../core/widget.h"
 #include "../gauges/segment_indicator.h"
 
 namespace McuGui {
