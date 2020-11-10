@@ -3,7 +3,7 @@
 #include <QPainter>
 #include <QTimer>
 
-#include "../mcu_gui/dashboard/dashboard_typ1.h"
+#include "../mcu_gui/core/painter/paint_device.h"
 
 using namespace McuGui;
 
@@ -11,52 +11,26 @@ MainWindow::MainWindow(uint16_t width, uint16_t height)
     : QMainWindow(nullptr), height_(height), width_(width)
 {
     this->setFixedSize(width, height);
-
+    // setup redwaring by timer
     paintTimer_ = new QTimer;
     paintTimer_->setInterval(100);
     this->connect(paintTimer_, SIGNAL(timeout()), SLOT(repaint()));
     paintTimer_->start();
 
-    mainImage_ = new QImage(width, height, QImage::Format_Indexed8);
+    mainImage_ = new QImage(width, height, QImage::Format_ARGB32);
 
-    QVector<QRgb> colortable(256);
-    auto rawTable = getColorTable();
-    for(int i = 0; i < 256; ++i) {
-        QRgb val = rawTable[i] | 0xFF000000;
-        colortable[i] = val;
-    }
-    mainImage_->setColorTable(colortable);
-    buffer_ = new McuGui::Color[width * height];
-    for(auto i = 0; i< width * height; ++i) buffer_[i] = COLOR_BLACK;
 
-    MemoryPaintEngine engine(buffer_);
-    SimplePainter painter(engine);
+    // setup McuGui
+    buffer_ = new ColorFormat::data_type[width * height];
+    MemoryPaintDevice<ColorFormat> device(buffer_, DISPLAY_480_272);
 
-    QImage image1(":/png/battery_scale_8.png");
-    auto imagePtr1 = (Color*)image1.bits();
-    Bitmap volt{imagePtr1, {88, 75}};
+    device.fillRegion({0, 0}, DISPLAY_480_272, ColorFormat::fromConstant(Color::DARK_BLUE));
 
-    QImage image2(":/png/temp_scale_8.png");
-    auto imagePtr2 = (Color*)image2.bits();
-    Bitmap temp{imagePtr2, {88, 75}};
+    QImage image1(":/png/battery_scale.png");
+    auto imagePtr1 = (ColorFormat::data_type*)image1.bits();
+    MemoryPaintDevice<ColorFormat>::bitmap_type volt{imagePtr1, {85, 75}};
 
-    QImage image3(":/png/typ1_8.png");
-    auto imagePtr3 = (Color*)image3.bits();
-    Bitmap tach{imagePtr3, {460, 220}};
-
-    DashboardType1::Data data;
-    data.tach = 10000;
-    data.hrs=23;
-    data.min=30;
-    data.temp=120;
-    data.voltage=14.5;
-    data.speed=89;
-
-    data.lamps.ltl = true;
-
-    DashboardType1 dash(tach, volt, temp);
-    dash.setData(data);
-    dash.paint(painter);
+    device.copyBitmap({0, 0}, volt);
 }
 
 MainWindow::~MainWindow()
@@ -66,10 +40,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::paintEvent(QPaintEvent *)
 {
-    McuGui::Color *line;
+    ColorFormat::data_type *line;
     for(int y=0; y<height_; y++)
     {
-        line=(McuGui::Color*)mainImage_->scanLine(y);
+        line=(ColorFormat::data_type*)mainImage_->scanLine(y);
         for(int x=0; x<width_; x++)
         {
             line[x]=buffer_[x+y*width_];
@@ -77,5 +51,4 @@ void MainWindow::paintEvent(QPaintEvent *)
     }
     QPainter painter(this);
     painter.drawImage(0,0,*mainImage_);
-    mainImage_->save("./image.png");
 }

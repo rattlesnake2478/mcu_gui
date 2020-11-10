@@ -3,14 +3,16 @@
 
 #include <QMainWindow>
 
-#include "../mcu_gui/core/painter.h"
+#include "../mcu_gui/core/color/colors.h"
+
+using ColorFormat = McuGui::ColorARGB32;
 
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    MainWindow(uint16_t width=480u, uint16_t height=270u);
+    MainWindow(uint16_t width=480u, uint16_t height=272u);
     ~MainWindow();
 
 protected:
@@ -18,7 +20,7 @@ protected:
 
 private:
     uint16_t height_, width_;
-    McuGui::Color *buffer_;
+    ColorFormat::data_type *buffer_;
     QTimer *paintTimer_;
     QImage *mainImage_;
 };
